@@ -85,7 +85,7 @@ export class LoggerService extends AbstractService {
         }
         const pathInfo = path.parse(fileName)
         for (const m of email) {
-            await this.app.mailService.send(m, `eapub ${pathInfo.base}`,
+            await this.app.mailService.send(m, `mediaStore ${pathInfo.base}`,
                 `<p style="font-family: monospace;">${fs.readFileSync(fileName).toString().replace(/\n/g, '<br>')}</p>`,
             )
         }
