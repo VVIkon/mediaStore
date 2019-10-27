@@ -2,37 +2,35 @@ import { Application } from '../../Application'
 import DataTypes from 'sequelize'
 import { AbstractModel } from '../../Base/Services/AbstractModel'
 
-export interface IDepart {
-    id: number,
+export interface ICrossStoreSelector{
     storePointId: number,
-    nameDepartment: string,
+    fileId: number,
+    permissionType: string,
     deletedAt: number,
     updatedAt?: number,
     createdAt?: number
 }
 
-export class DepartmentModel extends AbstractModel {
-    public departmentModel: any
+export class CrossStoreSelectorModel extends AbstractModel {
+    public crossStoreSelectorModel: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.departmentModel = app.dbService.sequelize.define('departments', {
-            id: {
+        this.crossStoreSelectorModel = app.dbService.sequelize.define('cross_store_selector', {
+            storePointId: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
-                autoIncrement: true,
-                field: 'id',
-            },
-            storePointId: {
-                type: DataTypes.INTEGER(),
                 field: 'store_point_id',
-                allowNull: false,
-                references: { model: 'store_points', key: 'id' }
             },
-            nameDepartment: {
-                type: DataTypes.STRING(255),
-                field: 'store_point_set',
+            fileId: {
+                type: DataTypes.INTEGER(),
+                primaryKey: true,
+                field: 'file_id',
+            },
+            permissionType: {
+                type: DataTypes.STRING(2),
+                field: 'permission_type',
                 allowNull: false,
             },
             deletedAt: {
@@ -53,6 +51,6 @@ export class DepartmentModel extends AbstractModel {
             },
 
         // this.userModel.hasMany(this.app.subordinationService.subordinationModel, { foreignKey: 'userId' })
-        }, {tableName: 'departments', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
+        }, {tableName: 'cross_store_selector', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
     }
 }

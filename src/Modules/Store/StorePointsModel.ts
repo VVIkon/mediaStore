@@ -7,9 +7,9 @@ export interface IStorePoints {
     parentId: number
     pointName: string
     permissionGroupSet: string
-    deletedAt: number
-    updatedAt: number
-    createdAt: number
+    deletedAt: number,
+    updatedAt?: number,
+    createdAt?: number
 }
 
 export class StorePointsModel extends AbstractModel{

@@ -2,37 +2,36 @@ import { Application } from '../../Application'
 import DataTypes from 'sequelize'
 import { AbstractModel } from '../../Base/Services/AbstractModel'
 
-export interface IDepart {
+export interface IFileType {
     id: number,
-    storePointId: number,
-    nameDepartment: string,
+    fileType: string,
+    directive: string,
     deletedAt: number,
     updatedAt?: number,
-    createdAt?: number
+    createdAt?: number,
 }
 
-export class DepartmentModel extends AbstractModel {
-    public departmentModel: any
+export class RefFileTypeModel extends AbstractModel {
+    public refFileTypeModel: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.departmentModel = app.dbService.sequelize.define('departments', {
+        this.refFileTypeModel = app.dbService.sequelize.define('ref_file_types', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
                 field: 'id',
             },
-            storePointId: {
-                type: DataTypes.INTEGER(),
-                field: 'store_point_id',
+            fileType: {
+                type: DataTypes.STRING(100),
+                field: 'file_type',
                 allowNull: false,
-                references: { model: 'store_points', key: 'id' }
             },
-            nameDepartment: {
+            directive: {
                 type: DataTypes.STRING(255),
-                field: 'store_point_set',
+                field: 'directive',
                 allowNull: false,
             },
             deletedAt: {
@@ -53,6 +52,8 @@ export class DepartmentModel extends AbstractModel {
             },
 
         // this.userModel.hasMany(this.app.subordinationService.subordinationModel, { foreignKey: 'userId' })
-        }, {tableName: 'departments', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
+        }, {tableName: 'ref_file_types', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
     }
+
+
 }

@@ -12,9 +12,9 @@ export interface IFile {
     tags: string
     refSet: string
     keyWords: string
-    deletedAt: number
-    updatedAt: number
-    createdAt: number
+    deletedAt: number,
+    updatedAt?: number,
+    createdAt?: number
 }
 
 export class FileModel extends AbstractModel{
@@ -46,7 +46,7 @@ export class FileModel extends AbstractModel{
             },
             fileTypeId:{
                 type: DataTypes.INTEGER(),
-                field: 'file_type__id',
+                field: 'file_type_id',
                 allowNull: false,
                 references: { model: 'fet_file_types', key: 'id' }
             },

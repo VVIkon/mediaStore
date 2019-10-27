@@ -12,13 +12,13 @@ export interface IUser {
     mobile: string,
     userLogin: string,
     userPassword: string,
-    Salt?: string|undefined,
-    Token?: string|undefined,
+    salt?: string|undefined,
+    token?: string|undefined,
     tokenExpare?: number|undefined,
     permitionGroupSet: string,
     deletedAt: number,
-    updatedAt: number,
-    createdAt: number,
+    updatedAt?: number,
+    createdAt?: number
 
 }
 export interface IRetUserStruct {
@@ -40,13 +40,13 @@ export class UserModel extends AbstractModel {
                 autoIncrement: true,
                 field: 'id',
             },
-            departmentId:{
+            departmentId: {
                 type: DataTypes.INTEGER(),
                 field: 'department_id',
                 allowNull: false,
                 references: { model: 'department', key: 'id' }
             },
-            storePointSet:{
+            storePointSet: {
                 type: DataTypes.INTEGER(),
                 field: 'store_point_set',
                 allowNull: false,
@@ -56,37 +56,22 @@ export class UserModel extends AbstractModel {
                 field: 'user_name',
                 allowNull: false,
             },
-            email: {
-                type: DataTypes.STRING(100),
-                field: 'email',
-                allowNull: true,
-            },
-            phone: {
-                type: DataTypes.STRING(100),
-                field: 'email',
-                allowNull: true,
-            },
-            mobile: {
-                type: DataTypes.STRING(100),
-                field: 'email',
-                allowNull: true,
-            },
             userLogin: {
-                type: DataTypes.STRING(35),
+                type: DataTypes.STRING(50),
                 field: 'user_login',
                 allowNull: true,
             },
             userPassword: {
-                type: DataTypes.STRING(128),
+                type: DataTypes.STRING(512),
                 field: 'user_password',
                 allowNull: true,
             },
-            uToken: {
+            token: {
                 type: DataTypes.STRING(512),
                 field: 'user_token',
                 allowNull: true,
             },
-            uSalt: {
+            salt: {
                 type: DataTypes.BIGINT,
                 field: 'user_salt',
                 defaultValue: 0,
@@ -98,8 +83,23 @@ export class UserModel extends AbstractModel {
             },
             permitionGroupSet: {
                 type: DataTypes.STRING(255),
-                field: 'permition_id',
+                field: 'permission_group_set',
                 defaultValue: 0,
+            },
+            email: {
+                type: DataTypes.STRING(100),
+                field: 'email',
+                allowNull: true,
+            },
+            phone: {
+                type: DataTypes.STRING(100),
+                field: 'phone',
+                allowNull: true,
+            },
+            mobile: {
+                type: DataTypes.STRING(100),
+                field: 'mobile',
+                allowNull: true,
             },
             deletedAt: {
                 type: DataTypes.INTEGER,
@@ -119,7 +119,7 @@ export class UserModel extends AbstractModel {
             },
 
         // this.userModel.hasMany(this.app.subordinationService.subordinationModel, { foreignKey: 'userId' })
-        })
+        }, {tableName: 'users', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
     }
 
 

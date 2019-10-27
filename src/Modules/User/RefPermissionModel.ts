@@ -2,37 +2,36 @@ import { Application } from '../../Application'
 import DataTypes from 'sequelize'
 import { AbstractModel } from '../../Base/Services/AbstractModel'
 
-export interface IDepart {
+export interface IPermission {
     id: number,
-    storePointId: number,
-    nameDepartment: string,
+    tag: string,
+    description: string,
     deletedAt: number,
     updatedAt?: number,
-    createdAt?: number
+    createdAt?: number,
 }
 
-export class DepartmentModel extends AbstractModel {
-    public departmentModel: any
+export class RefPermissionModel extends AbstractModel {
+    public refPermissionModel: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.departmentModel = app.dbService.sequelize.define('departments', {
+        this.refPermissionModel = app.dbService.sequelize.define('ref_permissions', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
                 field: 'id',
             },
-            storePointId: {
-                type: DataTypes.INTEGER(),
-                field: 'store_point_id',
+            tag: {
+                type: DataTypes.STRING(50),
+                field: 'tag',
                 allowNull: false,
-                references: { model: 'store_points', key: 'id' }
             },
-            nameDepartment: {
+            description: {
                 type: DataTypes.STRING(255),
-                field: 'store_point_set',
+                field: 'description',
                 allowNull: false,
             },
             deletedAt: {
@@ -53,6 +52,6 @@ export class DepartmentModel extends AbstractModel {
             },
 
         // this.userModel.hasMany(this.app.subordinationService.subordinationModel, { foreignKey: 'userId' })
-        }, {tableName: 'departments', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
+        }, {tableName: 'ref_permissions', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
     }
 }
