@@ -1,0 +1,10 @@
+module.exports = {
+    nodeEnv: 'develop',
+    port: 3003,
+    db: {
+        name: 'name',
+        user: 'user',
+        password: '123',
+    },
+    storage: '/home/Projects/...',
+}
