@@ -1,34 +1,31 @@
 import Nodemailer from 'nodemailer'
 import { Application } from '../../Application'
 
+export interface IMailParams {
+    host: string,
+    port: number,
+    secure: boolean,
+    tls: {
+        rejectUnauthorized: boolean,
+    },
+    auth: undefined|{ user: string, pass: string },
+}
+
+
 export class MailService {
     private config: any
     private transporter: Nodemailer.Transporter
 
     public constructor(protected app: Application) {
         const config = app.config.notification.mailHost
-        const params: {
-            host: string,
-            port: number,
-            secure: boolean,
-            tls: {
-                rejectUnauthorized: boolean,
-            },
-            auth: undefined|{ user: string, pass: string },
-        } = {
+        const params: IMailParams = {
             host: config.host,
             port: config.port,
             secure: config.secure,
-            tls: {
-                rejectUnauthorized: false,
-            },
-            auth: undefined,
-        }
-
-        if (config.user) {
-            params.auth = {
-                user: config.user,
-                pass: config.password,
+            tls: {rejectUnauthorized: false },
+            auth: {
+                user: config.user ? config.user : '',
+                pass: config.password ? config.password : '',
             }
         }
 
