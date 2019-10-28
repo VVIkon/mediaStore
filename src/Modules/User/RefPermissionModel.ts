@@ -12,12 +12,11 @@ export interface IPermission {
 }
 
 export class RefPermissionModel extends AbstractModel {
-    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.Model = app.dbService.sequelize.define('ref_permissions', {
+        this.model = app.dbService.sequelize.define('ref_permissions', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,

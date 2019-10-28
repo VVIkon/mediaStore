@@ -13,12 +13,11 @@ export interface IStorePoints {
 }
 
 export class StorePointsModel extends AbstractModel{
-    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.Model = app.dbService.sequelize.define('store_points', {
+        this.model = app.dbService.sequelize.define('store_points', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -65,15 +64,15 @@ export class StorePointsModel extends AbstractModel{
             },
         }, {tableName: 'store_points', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
 
-        this.Model.hasMany(this.app.crossStoreSelectorModel.Model, { foreignKey: 'storePointId' })
+        this.model.hasMany(this.app.crossStoreSelectorModel.model, { foreignKey: 'storePointId' })
     }
 
 /** ---------------------------------GET/SET--------------------------------------- */
 
-    public async getStorePointTree (pointId: number, deleted: number[]=[0]): Promise<IStorePoints[]>{
-        return this.Model.findAll({
+    public async getStorePointChilds (pointId: number, deleted: number[]=[0]): Promise<IStorePoints[]> {
+        return await this.model.findAll({
             where: {
-                id: {[DataTypes.Op.eq]: pointId},
+                parentId: {[DataTypes.Op.eq]: pointId},
                 deleted: {[DataTypes.Op.in]: deleted }
             },
             order: [
@@ -81,35 +80,4 @@ export class StorePointsModel extends AbstractModel{
             ]
         })
     }
-    public async saveStorePointItem(params: IStorePoints): Promise<IStorePoints> {
-        let result = null
-        if (params.id) {
-            try {
-                let foundStorePoint = await this.Model.findById(params.id)
-                if (foundStorePoint) {
-                    foundStorePoint = params
-                    result = await foundStorePoint.save()
-                }
-            } catch (err) {
-                console.log('Ошибка: ' + err, params.toString())
-            }
-        } else {
-            try {
-                result = await this.Model.create({ params})
-            } catch (err) {
-                console.log('Ошибка: ' + err, params.toString())
-            }
-        }
-        return result.dataValues
-    }
-    
-
-
-
 }    
-
-
-
-
-
-

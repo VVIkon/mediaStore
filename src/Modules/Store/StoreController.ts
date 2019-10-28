@@ -9,6 +9,15 @@ export class StoreController extends AbstractController {
         super(app)
     }
 
+    public getStorePoint(req:Request, res: Response) {
+        const result = null
+
+        if (result) {
+            return this.successResponse(res, { result: true })
+        } else {
+            return this.errorResponse(res, 'No data yet')
+        }
+    }
 
 
 }

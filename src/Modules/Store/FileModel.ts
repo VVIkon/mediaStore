@@ -18,12 +18,11 @@ export interface IFile {
 }
 
 export class FileModel extends AbstractModel{
-    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.Model = app.dbService.sequelize.define('files', {
+        this.model = app.dbService.sequelize.define('files', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -88,46 +87,43 @@ export class FileModel extends AbstractModel{
             },
         }, {tableName: 'files', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
 
-        this.Model.hasMany(this.Model, { foreignKey: 'parentId' })
-        this.Model.hasMany(this.app.crossStoreSelectorModel.Model, { foreignKey: 'fileId' })
+        this.model.hasMany(this.model, { foreignKey: 'parentId' })
+        this.model.hasMany(this.app.crossStoreSelectorModel.model, { foreignKey: 'fileId' })
     }
 
 /** ---------------------------------GET/SET--------------------------------------- */
 
-    public async getFile(id: number): Promise<IFile>{
-        return this.Model.findAll({
-            where: {
-                id: {[DataTypes.Op.eq]: id},
-            },
-            order: [
-                ['id', 'ASC']
-            ]
-        })
-    }
-    public async saveStorePointItem(params: IFile): Promise<IFile> {
-        let result = null
-        if (params.id) {
-            try {
-                let foundStorePoint = await this.Model.findById(params.id)
-                if (foundStorePoint) {
-                    foundStorePoint = params
-                    result = await foundStorePoint.save()
-                }
-            } catch (err) {
-                console.log('Ошибка: ' + err, params.toString())
-            }
-        } else {
-            try {
-                result = await this.Model.create({ params})
-            } catch (err) {
-                console.log('Ошибка: ' + err, params.toString())
-            }
-        }
-        return result.dataValues
-    }
-    
-
-
+    // public async getFile(id: number): Promise<IFile>{
+    //     return this.Model.findAll({
+    //         where: {
+    //             id: {[DataTypes.Op.eq]: id},
+    //         },
+    //         order: [
+    //             ['id', 'ASC']
+    //         ]
+    //     })
+    // }
+    // public async saveStorePointItem(params: IFile): Promise<IFile> {
+    //     let result = null
+    //     if (params.id) {
+    //         try {
+    //             let foundStorePoint = await this.Model.findById(params.id)
+    //             if (foundStorePoint) {
+    //                 foundStorePoint = params
+    //                 result = await foundStorePoint.save()
+    //             }
+    //         } catch (err) {
+    //             console.log('Ошибка: ' + err, params.toString())
+    //         }
+    //     } else {
+    //         try {
+    //             result = await this.Model.create({ params})
+    //         } catch (err) {
+    //             console.log('Ошибка: ' + err, params.toString())
+    //         }
+    //     }
+    //     return result.dataValues
+    // }
 
 }    
 

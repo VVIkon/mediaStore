@@ -12,12 +12,11 @@ export interface IFileType {
 }
 
 export class RefFileTypeModel extends AbstractModel {
-    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.Model = app.dbService.sequelize.define('ref_file_types', {
+        this.model = app.dbService.sequelize.define('ref_file_types', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -52,6 +51,7 @@ export class RefFileTypeModel extends AbstractModel {
             },
 
         }, {tableName: 'ref_file_types', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
-        this.Model.hasMany(this.app.fileModel.Model, { foreignKey: 'fileTypeId' })
+        this.model.hasMany(this.app.fileModel.model, { foreignKey: 'fileTypeId' })
     }
+   
 }

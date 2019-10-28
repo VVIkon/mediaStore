@@ -12,12 +12,11 @@ export interface ICrossStoreSelector{
 }
 
 export class CrossStoreSelectorModel extends AbstractModel {
-    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.Model = app.dbService.sequelize.define('cross_store_selectors', {
+        this.model = app.dbService.sequelize.define('cross_store_selectors', {
             storePointId: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -53,5 +52,18 @@ export class CrossStoreSelectorModel extends AbstractModel {
             },
 
         }, {tableName: 'cross_store_selector', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
+    }
+
+    public async getFilesFromPoint (parentId: number, deleted: number[]=[0]): Promise<any[]> {
+        return await this.model.findAll({
+            include: [this.app.fileModel.model],
+            where: {
+                parentId: {[DataTypes.Op.eq]: parentId},
+                deleted: {[DataTypes.Op.in]: deleted }
+            },
+            order: [
+                ['id', 'ASC']
+            ]
+        })
     }
 }

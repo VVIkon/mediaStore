@@ -6,6 +6,7 @@ import { AbstractConsoleCommand } from './Base/Consoles/AbstractConsoleCommand'
 import { LoggerService} from './Base/Services/LoggerService'
 import { MailService} from './Base/Services/MailService'
 
+import { Router} from './Modules/Router'
 import { StoreController} from './Modules/Store/StoreController'
 import { StoreService} from './Modules/Store/StoreService'
 import { StorePointsModel} from './Modules/Store/StorePointsModel'
@@ -28,6 +29,7 @@ export class Application {
     /* Commands */
     // public testCommand!: TestCommand
 
+    public router!: Router
     /* Controllers */
     public storeController!: StoreController
     public userController!: UserController
@@ -86,6 +88,7 @@ export class Application {
         this.http.use(Express.urlencoded({ extended: true }))
         this.http.use(Multiparty())
         this.initializeControllers()
+        this.router = new Router(this)
 
         this.http.listen(this.config.port, () => {
             console.log(`Web server started at port ${this.config.port}`)

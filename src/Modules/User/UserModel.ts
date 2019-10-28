@@ -28,12 +28,11 @@ export interface IRetUserStruct {
 }
 
 export class UserModel extends AbstractModel {
-    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.Model = app.dbService.sequelize.define('users', {
+        this.model = app.dbService.sequelize.define('users', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -128,19 +127,13 @@ export class UserModel extends AbstractModel {
      * Список владельцев МАС-адресов
      * @param {*} active
      */
-    public async getUsers(active = [1], useCache: boolean = true):Promise<IUser[]|undefined> {
-        // const json = await this.app.cacheService.get(`users_${active.join('_')}`) as string|undefined
-        // if (json && useCache) {
-        //     return JSON.parse(json)
-        // }
+    public async getUsers(deleteIt = [0], ):Promise<IUser[]|undefined> {
         try {
             const result: IUser[] = []
-            const rows =  await this.Model.findAll({
+            const rows =  await this.model.findAll({
                 attributes: ['id', 'departmentId','storePointId','userName', 'userLogin', 'userPassword', 'permitionGroupSet', 'email', 'phone','mobile', 'deletedAt', 'updatedAt', 'createdAt'],
                 where: {
-                    active: {
-                        [DataTypes.Op.in]: active,
-                    }
+                    deletedAt: {[DataTypes.Op.eq]: deleteIt }
                 },
                 order: [
                     ['id', 'ASC']
@@ -163,7 +156,6 @@ export class UserModel extends AbstractModel {
                     createdAt: r.createdAt,
                 })
             }
-            // this.app.cacheService.set(`users_${active.join('_')}`, JSON.stringify(result), 60 * 10)
             return result
         } catch (err) {
             console.error(`ERROR_USER_SERVICE: ${err.message}`)
@@ -183,7 +175,7 @@ export class UserModel extends AbstractModel {
 
         if (params.id) {
             try {
-                const foundItem = await this.Model.findById(params.id)
+                const foundItem = await this.model.findById(params.id)
                 if (foundItem) {
                     foundItem.id = params.id
                     foundItem.uName = params.userName
@@ -203,7 +195,7 @@ export class UserModel extends AbstractModel {
 
         } else {
             try {
-                result = await this.Model.create({
+                result = await this.model.create({
                     id: params.id,
                     uName: params.userName,
                     uLogin: params.userLogin,
@@ -238,7 +230,7 @@ export class UserModel extends AbstractModel {
         if (!params.username || !params.password) {
             return { error: 'Не получен логин или пароль', token: undefined }
         }
-        const res = await this.Model.findOne({
+        const res = await this.model.findOne({
             where: {
                 userLogin: params.username,
                 active: 1,
@@ -271,7 +263,7 @@ export class UserModel extends AbstractModel {
     }
 
     public async getUsersByPermition(active = [1], permitions = [2], flag = 1):Promise<IUser[]|undefined> {
-        return await this.Model.findAll({
+        return await this.model.findAll({
 //             include: [this.app.subordinationService.subordinationModel],
             attributes: flag ? ['id', 'uName', 'email'] : ['id', 'uName', 'uLogin', 'uPassword', 'permitionId', 'email', 'active', 'departId'],
             where: {
@@ -294,7 +286,7 @@ export class UserModel extends AbstractModel {
      */
     public async getUserByToken(token: string): Promise<IRetUserStruct> {
         try {
-            const res = await this.Model.findOne({
+            const res = await this.model.findOne({
                 // include: [this.app.subordinationService.subordinationModel],
                 // attributes: ['id', 'uName', 'uLogin', 'uPassword', 'permitionId', 'tokenExpare', 'email', 'departId'],
                 where: {
@@ -319,7 +311,7 @@ export class UserModel extends AbstractModel {
     }
 
     public async getUserById(id: number|undefined): Promise<IUser|null> {
-        return id ? await this.Model.findOne({
+        return id ? await this.model.findOne({
             attributes: ['id', 'uName', 'uLogin', 'uPassword', 'permitionId', 'tokenExpare', 'email', 'departId'],
             where: {
                 id,
