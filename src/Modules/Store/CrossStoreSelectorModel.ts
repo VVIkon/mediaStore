@@ -12,21 +12,23 @@ export interface ICrossStoreSelector{
 }
 
 export class CrossStoreSelectorModel extends AbstractModel {
-    public crossStoreSelectorModel: any
+    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.crossStoreSelectorModel = app.dbService.sequelize.define('cross_store_selector', {
+        this.Model = app.dbService.sequelize.define('cross_store_selectors', {
             storePointId: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 field: 'store_point_id',
+                references: { model: 'store_points', key: 'id' }
             },
             fileId: {
                 type: DataTypes.INTEGER(),
                 primaryKey: true,
                 field: 'file_id',
+                references: { model: 'files', key: 'id' }
             },
             permissionType: {
                 type: DataTypes.STRING(2),
@@ -50,7 +52,6 @@ export class CrossStoreSelectorModel extends AbstractModel {
                 allowNull: false,
             },
 
-        // this.userModel.hasMany(this.app.subordinationService.subordinationModel, { foreignKey: 'userId' })
         }, {tableName: 'cross_store_selector', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
     }
 }

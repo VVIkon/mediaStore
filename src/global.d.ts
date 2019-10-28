@@ -34,6 +34,27 @@ declare interface IConfig {
             sender: string,
         },
     },
+    development: {
+        username: string|null,
+        password: string|null,
+        database: string|null,
+        host: string,
+        dialect: string,
+    },
+    test: {
+        username: string|null,
+        password: string|null,
+        database: string|null,
+        host: string,
+        dialect: string,
+    },
+    production: {
+        username: string|null,
+        password: string|null,
+        database: string|null,
+        host: string,
+        dialect: string,
+    },
 }
 
 declare module "connect-multiparty" {

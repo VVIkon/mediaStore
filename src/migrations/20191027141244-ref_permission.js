@@ -35,13 +35,13 @@ module.exports = {
                 allowNull: false,
             },
         })
-        await queryInterface.addIndex('ref_permissions', { name: 'idx_tag', fields: ['tag'] })
-        await queryInterface.addIndex('ref_permissions', { name: 'idx_deleted_at', fields: ['deleted_at'] })
+        await queryInterface.addIndex('ref_permissions', { name: 'idx_ref_permissions_tag', fields: ['tag'] })
+        await queryInterface.addIndex('ref_permissions', { name: 'idx_ref_permissions_deleted_at', fields: ['deleted_at'] })
     },
 
     down: async (queryInterface) => {
-        await queryInterface.removeIndex('ref_permissions', 'idx_tag')
-        await queryInterface.removeIndex('ref_permissions', 'idx_deleted_at')
+        await queryInterface.removeIndex('ref_permissions', 'idx_ref_permissions_tag')
+        await queryInterface.removeIndex('ref_permissions', 'idx_ref_permissions_deleted_at')
         await queryInterface.dropTable('ref_permissions')
     },
 }

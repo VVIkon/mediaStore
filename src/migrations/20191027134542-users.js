@@ -12,6 +12,7 @@ module.exports = {
                 type: Sequelize.INTEGER(),
                 field: 'department_id',
                 allowNull: false,
+                references: { model: 'departments', key: 'id' },
             },
             storePointSet: {
                 type: Sequelize.INTEGER(),
@@ -40,30 +41,31 @@ module.exports = {
             },
             userLogin: {
                 type: Sequelize.STRING(50),
-                field: 'user_login',
-                allowNull: true,
+                field: 'login',
+                allowNull: false,
             },
             userPassword: {
                 type: Sequelize.STRING(512),
-                field: 'user_password',
-                allowNull: true,
+                field: 'password',
+                allowNull: false,
             },
             token: {
                 type: Sequelize.STRING(512),
-                field: 'user_token',
+                field: 'token',
                 allowNull: true,
             },
             salt: {
                 type: Sequelize.BIGINT,
-                field: 'user_salt',
+                field: 'salt',
                 defaultValue: 0,
+                allowNull: true,
             },
             tokenExpare: {
                 type: Sequelize.BIGINT,
                 field: 'token_expare',
                 allowNull: true,
             },
-            permitionGroupSet: {
+            permissionGroupSet: {
                 type: Sequelize.STRING(255),
                 field: 'permission_group_set',
                 defaultValue: 0,
@@ -85,21 +87,20 @@ module.exports = {
                 allowNull: false,
             },
         })
-        await queryInterface.addIndex('users', { name: 'idx_store_point_set', fields: ['store_point_set'] })
-        await queryInterface.addIndex('users', { name: 'idx_user_name', fields: ['user_name'] })
-        await queryInterface.addIndex('users', { name: 'idx_user_login', fields: ['user_login'] })
-        await queryInterface.addIndex('users', { name: 'idx_user_token', fields: ['user_token'] })
-        await queryInterface.addIndex('users', { name: 'idx_permission_group_set', fields: ['permission_group_set'] })
-        await queryInterface.addIndex('users', { name: 'idx_deleted_at', fields: ['deleted_at'] })
+        await queryInterface.addIndex('users', { name: 'idx_users_store_point_set', fields: ['store_point_set'] })
+        await queryInterface.addIndex('users', { name: 'idx_users_user_name', fields: ['user_name'] })
+        await queryInterface.addIndex('users', { name: 'idx_users_user_login', fields: ['login'] })
+        await queryInterface.addIndex('users', { name: 'idx_users_user_token', fields: ['token'] })
+        await queryInterface.addIndex('users', { name: 'idx_users_permission_group_set', fields: ['permission_group_set'] })
+        await queryInterface.addIndex('users', { name: 'idx_users_deleted_at', fields: ['deleted_at'] })
     },
 
     down: async (queryInterface) => {
-        await queryInterface.removeIndex('users', 'idx_store_point_set')
-        await queryInterface.removeIndex('users', 'idx_user_name')
-        await queryInterface.removeIndex('users', 'idx_user_login')
-        await queryInterface.removeIndex('users', 'idx_user_token')
-        await queryInterface.removeIndex('users', 'idx_permission_group_set')
-        await queryInterface.removeIndex('users', 'idx_deleted_at')
+        await queryInterface.removeIndex('users', 'idx_users_store_point_set')
+        await queryInterface.removeIndex('users', 'idx_users_user_name')
+        await queryInterface.removeIndex('users', 'idx_users_user_token')
+        await queryInterface.removeIndex('users', 'idx_users_permission_group_set')
+        await queryInterface.removeIndex('users', 'idx_users_deleted_at')
         await queryInterface.dropTable('users')
     },
 }

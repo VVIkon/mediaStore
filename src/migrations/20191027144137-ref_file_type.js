@@ -35,13 +35,13 @@ module.exports = {
                 allowNull: false,
             },
         })
-        await queryInterface.addIndex('departments', { name: 'idx_file_type', fields: ['file_type'] })
-        await queryInterface.addIndex('departments', { name: 'idx_deleted_at', fields: ['deleted_at'] })
+        await queryInterface.addIndex('ref_file_types', { name: 'idx_ref_file_types_file_type', fields: ['file_type'] })
+        await queryInterface.addIndex('ref_file_types', { name: 'idx_ref_file_types_deleted_at', fields: ['deleted_at'] })
     },
 
     down: async (queryInterface) => {
-        await queryInterface.removeIndex('departments', 'idx_file_type')
-        await queryInterface.removeIndex('departments', 'idx_deleted_at')
-        await queryInterface.dropTable('departments')
+        await queryInterface.removeIndex('ref_file_types', 'idx_ref_file_types_file_type')
+        await queryInterface.removeIndex('ref_file_types', 'idx_ref_file_types_deleted_at')
+        await queryInterface.dropTable('ref_file_types')
     },
 }

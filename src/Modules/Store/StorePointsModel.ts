@@ -13,12 +13,12 @@ export interface IStorePoints {
 }
 
 export class StorePointsModel extends AbstractModel{
-    public storePointsModel: any
+    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.storePointsModel = app.dbService.sequelize.define('store_points', {
+        this.Model = app.dbService.sequelize.define('store_points', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -35,6 +35,13 @@ export class StorePointsModel extends AbstractModel{
                 field: 'point_name',
                 allowNull: false,
             },
+            departmentId: {
+                type: DataTypes.INTEGER(),
+                field: 'department_id',
+                allowNull: false,
+                references: { model: 'department', key: 'id' }
+            },
+
             permissionGroupSet: {
                 type: DataTypes.STRING(255),
                 field: 'permition_group_set',
@@ -57,12 +64,14 @@ export class StorePointsModel extends AbstractModel{
                 allowNull: false,
             },
         }, {tableName: 'store_points', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
+
+        this.Model.hasMany(this.app.crossStoreSelectorModel.Model, { foreignKey: 'storePointId' })
     }
 
 /** ---------------------------------GET/SET--------------------------------------- */
 
     public async getStorePointTree (pointId: number, deleted: number[]=[0]): Promise<IStorePoints[]>{
-        return this.storePointsModel.findAll({
+        return this.Model.findAll({
             where: {
                 id: {[DataTypes.Op.eq]: pointId},
                 deleted: {[DataTypes.Op.in]: deleted }
@@ -76,7 +85,7 @@ export class StorePointsModel extends AbstractModel{
         let result = null
         if (params.id) {
             try {
-                let foundStorePoint = await this.storePointsModel.findById(params.id)
+                let foundStorePoint = await this.Model.findById(params.id)
                 if (foundStorePoint) {
                     foundStorePoint = params
                     result = await foundStorePoint.save()
@@ -86,7 +95,7 @@ export class StorePointsModel extends AbstractModel{
             }
         } else {
             try {
-                result = await this.storePointsModel.create({ params})
+                result = await this.Model.create({ params})
             } catch (err) {
                 console.log('Ошибка: ' + err, params.toString())
             }

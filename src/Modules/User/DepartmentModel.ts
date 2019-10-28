@@ -12,23 +12,17 @@ export interface IDepart {
 }
 
 export class DepartmentModel extends AbstractModel {
-    public departmentModel: any
+    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.departmentModel = app.dbService.sequelize.define('departments', {
+        this.Model = app.dbService.sequelize.define('departments', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
                 field: 'id',
-            },
-            storePointId: {
-                type: DataTypes.INTEGER(),
-                field: 'store_point_id',
-                allowNull: false,
-                references: { model: 'store_points', key: 'id' }
             },
             nameDepartment: {
                 type: DataTypes.STRING(255),
@@ -52,7 +46,9 @@ export class DepartmentModel extends AbstractModel {
                 allowNull: false,
             },
 
-        // this.userModel.hasMany(this.app.subordinationService.subordinationModel, { foreignKey: 'userId' })
         }, {tableName: 'departments', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
+
+        this.Model.hasMany(this.app.storePointsModel.Model, { foreignKey: 'departmentId' })
+        this.Model.hasMany(this.app.userModel.Model, { foreignKey: 'departmentId' })
     }
 }

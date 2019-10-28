@@ -12,12 +12,12 @@ export interface IPermission {
 }
 
 export class RefPermissionModel extends AbstractModel {
-    public refPermissionModel: any
+    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.refPermissionModel = app.dbService.sequelize.define('ref_permissions', {
+        this.Model = app.dbService.sequelize.define('ref_permissions', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -51,7 +51,6 @@ export class RefPermissionModel extends AbstractModel {
                 allowNull: false,
             },
 
-        // this.userModel.hasMany(this.app.subordinationService.subordinationModel, { foreignKey: 'userId' })
         }, {tableName: 'ref_permissions', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
     }
 }

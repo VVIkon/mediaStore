@@ -26,6 +26,7 @@ module.exports = {
                 type: Sequelize.INTEGER(),
                 field: 'file_type_id',
                 allowNull: false,
+                references: { model: 'ref_file_types', key: 'id' },
             },
             fileSize: {
                 type: Sequelize.INTEGER(),
@@ -64,21 +65,21 @@ module.exports = {
                 allowNull: false,
             },
         })
-        await queryInterface.addIndex('files', { name: 'idx_file_ref', fields: ['file_ref'] })
-        await queryInterface.addIndex('files', { name: 'idx_file_name', fields: ['file_name'] })
-        await queryInterface.addIndex('files', { name: 'idx_tags', fields: ['tags'] })
-        await queryInterface.addIndex('files', { name: 'idx_ref_set', fields: ['ref_set'] })
-        await queryInterface.addIndex('files', { name: 'idx_key_words', fields: ['key_words'] })
-        await queryInterface.addIndex('files', { name: 'idx_deleted_at', fields: ['deleted_at'] })
+        // await queryInterface.addIndex('files', { name: 'idx_files_file_ref', fields: ['file_ref'] })
+        // await queryInterface.addIndex('files', { name: 'idx_files_file_name', fields: ['file_name'] })
+        // await queryInterface.addIndex('files', { name: 'idx_files_tags', fields: ['tags'] })
+        // await queryInterface.addIndex('files', { name: 'idx_files_ref_set', fields: ['ref_set'] })
+        // await queryInterface.addIndex('files', { name: 'idx_files_key_words', fields: ['key_words'] })
+        await queryInterface.addIndex('files', { name: 'idx_files_deleted_at', fields: ['deleted_at'] })
     },
 
     down: async (queryInterface) => {
-        await queryInterface.removeIndex('files', 'idx_file_ref')
-        await queryInterface.removeIndex('files', 'idx_file_name')
-        await queryInterface.removeIndex('files', 'idx_tags')
-        await queryInterface.removeIndex('files', 'idx_ref_set')
-        await queryInterface.removeIndex('files', 'idx_key_words')
-        await queryInterface.removeIndex('files', 'idx_deleted_at')
+        // await queryInterface.removeIndex('files', 'idx_files_file_ref')
+        // await queryInterface.removeIndex('files', 'idx_files_file_name')
+        // await queryInterface.removeIndex('files', 'idx_files_tags')
+        // await queryInterface.removeIndex('files', 'idx_files_ref_set')
+        // await queryInterface.removeIndex('files', 'idx_files_key_words')
+        await queryInterface.removeIndex('files', 'idx_files_deleted_at')
         await queryInterface.dropTable('files')
     },
 }

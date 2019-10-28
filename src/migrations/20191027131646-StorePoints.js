@@ -1,7 +1,7 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('store_point', {
+        await queryInterface.createTable('store_points', {
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
@@ -10,7 +10,14 @@ module.exports = {
             parentId: {
                 type: Sequelize.INTEGER,
                 field: 'parent_id',
+                allowNull: true,
+                references: { model: 'store_points', key: 'id' },
+            },
+            departmentId: {
+                type: Sequelize.INTEGER(),
+                field: 'department_id',
                 allowNull: false,
+                references: { model: 'departments', key: 'id' },
             },
             pointName: {
                 type: Sequelize.STRING(255),
@@ -19,7 +26,7 @@ module.exports = {
             },
             permissionGroupSet: {
                 type: Sequelize.STRING(255),
-                field: 'permition_group_set',
+                field: 'permission_group_set',
                 allowNull: false,
             },
             deletedAt: {
@@ -39,13 +46,13 @@ module.exports = {
                 allowNull: false,
             },
         })
-        await queryInterface.addIndex('store_point', { name: 'idx_point_name', fields: ['point_name'] })
-        await queryInterface.addIndex('store_point', { name: 'idx_deleted_at', fields: ['deleted_at'] })
+        await queryInterface.addIndex('store_points', { name: 'idx_store_point_point_name', fields: ['point_name'] })
+        await queryInterface.addIndex('store_points', { name: 'idx_store_point_deleted_at', fields: ['deleted_at'] })
     },
 
     down: async (queryInterface) => {
-        await queryInterface.removeIndex('store_point', 'idx_point_name')
-        await queryInterface.removeIndex('store_point', 'idx_deleted_at')
-        await queryInterface.dropTable('store_point')
+        await queryInterface.removeIndex('store_points', 'idx_store_point_point_name')
+        await queryInterface.removeIndex('store_points', 'idx_store_point_deleted_at')
+        await queryInterface.dropTable('store_points')
     },
 }

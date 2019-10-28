@@ -38,7 +38,7 @@
         "spaced-comment": "error",
         "space-infix-ops": "error",
         "object-shorthand": "error",
-        "max-len": ["error", 140],
+        "max-len": ["error", 340],
         "keyword-spacing": "error",
         "comma-spacing": "error",
         "space-unary-ops": "error",

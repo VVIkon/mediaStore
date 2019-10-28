@@ -9,9 +9,15 @@ import { MailService} from './Base/Services/MailService'
 import { StoreController} from './Modules/Store/StoreController'
 import { StoreService} from './Modules/Store/StoreService'
 import { StorePointsModel} from './Modules/Store/StorePointsModel'
+import { CrossStoreSelectorModel} from './Modules/Store/CrossStoreSelectorModel'
+import { FileModel} from './Modules/Store/FileModel'
+import { RefFileTypeModel} from './Modules/Store/RefFileTypeModel'
+
 import { UserController} from './Modules/User/UserController'
 import { UserService} from './Modules/User/UserService'
 import { UserModel} from './Modules/User/UserModel'
+import { DepartmentModel} from './Modules/User/DepartmentModel'
+import { RefPermissionModel} from './Modules/User/RefPermissionModel'
 
 
 export class Application {
@@ -33,8 +39,14 @@ export class Application {
 
     public storePointsModel!: StorePointsModel
     public storeService!: StoreService
+    public crossStoreSelectorModel!: CrossStoreSelectorModel
+    public fileModel!: FileModel
+    public refFileTypeModel!: RefFileTypeModel
+    
     public userService!: UserService
     public userModel!: UserModel
+    public departmentModel!: DepartmentModel
+    public refPermissionModel!: RefPermissionModel
 
     constructor(public config: IConfig) {}
 
@@ -95,8 +107,14 @@ export class Application {
         this.loggerService = new LoggerService(this)
 
         this.storePointsModel = new StorePointsModel(this)
+        this.crossStoreSelectorModel = new CrossStoreSelectorModel(this)
+        this.fileModel = new FileModel(this)
+        this.refFileTypeModel = new RefFileTypeModel(this)
         this.storeService = new StoreService(this)
+
         this.userModel = new UserModel(this)
+        this.departmentModel = new DepartmentModel(this)
+        this.refPermissionModel = new RefPermissionModel(this)
         this.userService = new UserService(this)
 
     }

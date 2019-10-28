@@ -1,0 +1,44 @@
+}
+
+module.exports = {
+    nodeEnv: 'develop',
+    port: 3003,
+    db: {
+        name: 'ms',
+        user: 'ms',
+        password: '123',
+        path: 'src/DB/ms',
+    },
+    mediaStorage: '/store',
+    notification: {
+        mailHost: {
+            host: '...',
+            port: 25,
+            secure: false,
+            user: '...',
+            password: '...',
+            sender: '...',
+        },
+    },
+        development: {
+        username: 'root',
+        password: null,
+        database: 'ms',
+        host: '127.0.0.1',
+        dialect: 'sqlite',
+    },
+    test: {
+        username: 'root',
+        password: null,
+        database: 'ms',
+        host: '127.0.0.1',
+        dialect: 'sqlite',
+    },
+    production: {
+        username: 'ms',
+        password: '123',
+        database: 'ms',
+        host: '127.0.0.1',
+        dialect: 'postgres',
+    },
+}

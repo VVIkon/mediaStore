@@ -18,12 +18,12 @@ export interface IFile {
 }
 
 export class FileModel extends AbstractModel{
-    public fileModel: any
+    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.fileModel = app.dbService.sequelize.define('files', {
+        this.Model = app.dbService.sequelize.define('files', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -48,13 +48,12 @@ export class FileModel extends AbstractModel{
                 type: DataTypes.INTEGER(),
                 field: 'file_type_id',
                 allowNull: false,
-                references: { model: 'fet_file_types', key: 'id' }
+                references: { model: 'ref_file_types', key: 'id' }
             },
             fileSize:{
                 type: DataTypes.INTEGER(),
                 field: 'file_size',
                 allowNull: false,
-                references: { model: 'fet_file_types', key: 'id' }
             },
             tags: {
                 type: DataTypes.STRING(255),
@@ -88,12 +87,15 @@ export class FileModel extends AbstractModel{
                 allowNull: false,
             },
         }, {tableName: 'files', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
+
+        this.Model.hasMany(this.Model, { foreignKey: 'parentId' })
+        this.Model.hasMany(this.app.crossStoreSelectorModel.Model, { foreignKey: 'fileId' })
     }
 
 /** ---------------------------------GET/SET--------------------------------------- */
 
     public async getFile(id: number): Promise<IFile>{
-        return this.fileModel.findAll({
+        return this.Model.findAll({
             where: {
                 id: {[DataTypes.Op.eq]: id},
             },
@@ -106,7 +108,7 @@ export class FileModel extends AbstractModel{
         let result = null
         if (params.id) {
             try {
-                let foundStorePoint = await this.fileModel.findById(params.id)
+                let foundStorePoint = await this.Model.findById(params.id)
                 if (foundStorePoint) {
                     foundStorePoint = params
                     result = await foundStorePoint.save()
@@ -116,7 +118,7 @@ export class FileModel extends AbstractModel{
             }
         } else {
             try {
-                result = await this.fileModel.create({ params})
+                result = await this.Model.create({ params})
             } catch (err) {
                 console.log('Ошибка: ' + err, params.toString())
             }

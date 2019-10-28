@@ -28,12 +28,12 @@ export interface IRetUserStruct {
 }
 
 export class UserModel extends AbstractModel {
-    public userModel: any
+    public Model: any
 
     constructor(protected app: Application) {
         super(app)
 
-        this.userModel = app.dbService.sequelize.define('users', {
+        this.Model = app.dbService.sequelize.define('users', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -117,8 +117,6 @@ export class UserModel extends AbstractModel {
                 field: 'created_at',
                 allowNull: false,
             },
-
-        // this.userModel.hasMany(this.app.subordinationService.subordinationModel, { foreignKey: 'userId' })
         }, {tableName: 'users', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
     }
 
@@ -137,7 +135,7 @@ export class UserModel extends AbstractModel {
         // }
         try {
             const result: IUser[] = []
-            const rows =  await this.userModel.findAll({
+            const rows =  await this.Model.findAll({
                 attributes: ['id', 'departmentId','storePointId','userName', 'userLogin', 'userPassword', 'permitionGroupSet', 'email', 'phone','mobile', 'deletedAt', 'updatedAt', 'createdAt'],
                 where: {
                     active: {
@@ -185,7 +183,7 @@ export class UserModel extends AbstractModel {
 
         if (params.id) {
             try {
-                const foundItem = await this.userModel.findById(params.id)
+                const foundItem = await this.Model.findById(params.id)
                 if (foundItem) {
                     foundItem.id = params.id
                     foundItem.uName = params.userName
@@ -205,7 +203,7 @@ export class UserModel extends AbstractModel {
 
         } else {
             try {
-                result = await this.userModel.create({
+                result = await this.Model.create({
                     id: params.id,
                     uName: params.userName,
                     uLogin: params.userLogin,
@@ -240,7 +238,7 @@ export class UserModel extends AbstractModel {
         if (!params.username || !params.password) {
             return { error: 'Не получен логин или пароль', token: undefined }
         }
-        const res = await this.userModel.findOne({
+        const res = await this.Model.findOne({
             where: {
                 userLogin: params.username,
                 active: 1,
@@ -273,7 +271,7 @@ export class UserModel extends AbstractModel {
     }
 
     public async getUsersByPermition(active = [1], permitions = [2], flag = 1):Promise<IUser[]|undefined> {
-        return await this.userModel.findAll({
+        return await this.Model.findAll({
 //             include: [this.app.subordinationService.subordinationModel],
             attributes: flag ? ['id', 'uName', 'email'] : ['id', 'uName', 'uLogin', 'uPassword', 'permitionId', 'email', 'active', 'departId'],
             where: {
@@ -296,7 +294,7 @@ export class UserModel extends AbstractModel {
      */
     public async getUserByToken(token: string): Promise<IRetUserStruct> {
         try {
-            const res = await this.userModel.findOne({
+            const res = await this.Model.findOne({
                 // include: [this.app.subordinationService.subordinationModel],
                 // attributes: ['id', 'uName', 'uLogin', 'uPassword', 'permitionId', 'tokenExpare', 'email', 'departId'],
                 where: {
@@ -321,7 +319,7 @@ export class UserModel extends AbstractModel {
     }
 
     public async getUserById(id: number|undefined): Promise<IUser|null> {
-        return id ? await this.userModel.findOne({
+        return id ? await this.Model.findOne({
             attributes: ['id', 'uName', 'uLogin', 'uPassword', 'permitionId', 'tokenExpare', 'email', 'departId'],
             where: {
                 id,
