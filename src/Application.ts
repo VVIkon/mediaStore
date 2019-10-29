@@ -110,14 +110,14 @@ export class Application {
         this.loggerService = new LoggerService(this)
 
         this.storePointsModel = new StorePointsModel(this)
-        this.crossStoreSelectorModel = new CrossStoreSelectorModel(this)
-        this.fileModel = new FileModel(this)
         this.refFileTypeModel = new RefFileTypeModel(this)
+        this.fileModel = new FileModel(this)
+        this.crossStoreSelectorModel = new CrossStoreSelectorModel(this)
         this.storeService = new StoreService(this)
 
-        this.userModel = new UserModel(this)
         this.departmentModel = new DepartmentModel(this)
         this.refPermissionModel = new RefPermissionModel(this)
+        this.userModel = new UserModel(this)
         this.userService = new UserService(this)
 
     }

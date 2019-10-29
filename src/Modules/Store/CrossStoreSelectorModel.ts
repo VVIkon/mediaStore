@@ -51,18 +51,21 @@ export class CrossStoreSelectorModel extends AbstractModel {
                 allowNull: false,
             },
 
-        }, {tableName: 'cross_store_selector', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
+        }, {tableName: 'cross_store_selectors', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
+
+        this.model.belongsTo(this.app.fileModel.model)
+        this.model.belongsTo(this.app.storePointsModel.model)
     }
 
-    public async getFilesFromPoint (parentId: number, deleted: number[]=[0]): Promise<any[]> {
+    public async getFilesFromPoint (pointId: number, deleted: number[]=[0]): Promise<any[]> {
         return await this.model.findAll({
             include: [this.app.fileModel.model],
             where: {
-                parentId: {[DataTypes.Op.eq]: parentId},
-                deleted: {[DataTypes.Op.in]: deleted }
+                storePointId: {[DataTypes.Op.eq]: pointId},
+                deletedAt: {[DataTypes.Op.in]: deleted }
             },
             order: [
-                ['id', 'ASC']
+                ['fileId', 'ASC']
             ]
         })
     }

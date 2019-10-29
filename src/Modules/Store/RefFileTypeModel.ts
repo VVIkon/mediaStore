@@ -51,7 +51,7 @@ export class RefFileTypeModel extends AbstractModel {
             },
 
         }, {tableName: 'ref_file_types', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
-        this.model.hasMany(this.app.fileModel.model, { foreignKey: 'fileTypeId' })
+        // this.model.hasMany(this.app.fileModel.model, { foreignKey: 'fileTypeId' })
     }
    
 }

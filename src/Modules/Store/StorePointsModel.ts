@@ -43,7 +43,7 @@ export class StorePointsModel extends AbstractModel{
 
             permissionGroupSet: {
                 type: DataTypes.STRING(255),
-                field: 'permition_group_set',
+                field: 'permission_group_set',
                 allowNull: false,
             },
             deletedAt: {
@@ -64,16 +64,16 @@ export class StorePointsModel extends AbstractModel{
             },
         }, {tableName: 'store_points', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
 
-        this.model.hasMany(this.app.crossStoreSelectorModel.model, { foreignKey: 'storePointId' })
+        // this.model.hasMany(this.app.crossStoreSelectorModel.model, { foreignKey: 'storePointId' })
     }
 
 /** ---------------------------------GET/SET--------------------------------------- */
 
-    public async getStorePointChilds (pointId: number, deleted: number[]=[0]): Promise<IStorePoints[]> {
+    public async getStorePointChild (parentId: number, deleted: number[]=[0]): Promise<IStorePoints[]> {
         return await this.model.findAll({
             where: {
-                parentId: {[DataTypes.Op.eq]: pointId},
-                deleted: {[DataTypes.Op.in]: deleted }
+                parentId: {[DataTypes.Op.eq]: parentId},
+                deletedAt: {[DataTypes.Op.in]: deleted }
             },
             order: [
                 ['id', 'ASC']

@@ -31,50 +31,46 @@ export class AbstractController {
 
     public async checkParameters(req: Request, requiredFields: any[] = []): Promise<{ [key: string]: any }> {
         const params = req.body
-        if (!requiredFields.includes('ip')) {
-            requiredFields.push('ip')
-        }
-
         if (!params.parameters) {
             throw new Error('insufficient_parameters')
         }
-        const parameters = JSON.parse(params.parameters)
+        // const parameters = JSON.parse(params.parameters)
+        const parameters = params.parameters
 
         if (!parameters) {
             throw new Error('insufficient_parameters')
         }
-
         for (const field of requiredFields) {
             if (!(field in parameters)) {
                 throw new Error('insufficient_parameters')
             }
         }
-
         return parameters
     }
 
 
-    public async getCurrentUser(req: Request): Promise<IUser|null> {
-        return await this.app.userService.getCurrentUser(req)
-    }
+    // public async getCurrentUser(req: Request): Promise<IUser|null> {
+    //     return await this.app.userService.getCurrentUser(req)
+    // }
 
-    public async hasPrivilege(req: Request, privilege: string|string[]): Promise<boolean> {
-        const user = await this.app.userService.getCurrentUser(req)
-        if (!user) {
-            return false
-        }
-        if (privilege instanceof Array) {
-            if (!privilege.length) {
-                return true
-            }
-            for (const priv of privilege) {
-                if (await this.app.userService.hasPrivilege(user, priv)) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
+    // public async hasPrivilege(req: Request, privilege: string|string[]): Promise<boolean> {
+
+    //     const user = await this.app.userService.getCurrentUser(req)
+    //     if (!user) {
+    //         return false
+    //     }
+    //     if (privilege instanceof Array) {
+    //         if (!privilege.length) {
+    //             return true
+    //         }
+    //         for (const priv of privilege) {
+    //             if (await this.app.userService.hasPrivilege(user, priv)) {
+    //                 return true
+    //             }
+    //         }
+    //     }
+    //     return false
+    // }
 
     public errorResponse(res: Response, errorMessage: string|null = null) {
         AbstractController.errorResponseStatic(res, errorMessage)

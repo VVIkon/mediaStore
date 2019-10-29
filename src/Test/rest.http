@@ -1,0 +1,75 @@
+GET http://mediastore.local/
+###
+POST http://mediastore.local/api/store-point HTTP/1.1
+content-type: application/json
+
+{
+    "parameters": {
+        "parentId": 10
+    }
+}
+###
+POST http://mediastore.local/api/store-point-files HTTP/1.1
+content-type: application/json
+
+{
+    "parameters": {
+        "parentId": 1
+    }
+}
+###
+POST http://mediastore.local/api/file HTTP/1.1
+content-type: application/json
+
+{
+    "parameters": {
+        "id": 1
+    }
+}
+###
+###
+POST http://mediastore.local/api/file-types HTTP/1.1
+content-type: application/json
+
+{
+    "parameters": {
+        "deleted": [0]
+    }
+}
+###
+POST http://mediastore.local/api/users-all HTTP/1.1
+content-type: application/json
+
+{
+    "parameters": {
+        "deleted": [0]
+    }
+}
+###
+POST http://mediastore.local/api/users-all-attr HTTP/1.1
+content-type: application/json
+
+{
+    "parameters": {
+        "deleted": [0]
+    }
+}
+###
+POST http://mediastore.local/api/departments HTTP/1.1
+content-type: application/json
+
+{
+    "parameters": {
+        "deleted": [0]
+    }
+}
+###
+POST http://mediastore.local/api/permissions HTTP/1.1
+content-type: application/json
+
+{
+    "parameters": {
+        "deleted": [0]
+    }
+}
+###

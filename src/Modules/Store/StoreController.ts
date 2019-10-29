@@ -9,11 +9,43 @@ export class StoreController extends AbstractController {
         super(app)
     }
 
-    public getStorePoint(req:Request, res: Response) {
-        const result = null
+    public async getStorePoint(req:Request, res: Response) {
+        const params = await this.checkParameters(req, ['parentId'])
 
+        const result = await this.app.storeService.getStorePoints(params.parentId)
         if (result) {
-            return this.successResponse(res, { result: true })
+            return this.successResponse(res, { result: result })
+        } else {
+            return this.errorResponse(res, 'No data yet')
+        }
+    }
+
+    public async getStorePointFiles(req:Request, res: Response) {
+        const params = await this.checkParameters(req, ['parentId'])
+
+        const result = await this.app.storeService.getStorePointFiles(params.parentId)
+        if (result) {
+            return this.successResponse(res, { result: result })
+        } else {
+            return this.errorResponse(res, 'No data yet')
+        }
+    }
+    public async getFile(req:Request, res: Response) {
+        const params = await this.checkParameters(req, ['id'])
+
+        const result = await this.app.storeService.getFile(params.id)
+        if (result) {
+            return this.successResponse(res, { result: result })
+        } else {
+            return this.errorResponse(res, 'No data yet')
+        }
+    }
+    public async getFileTypes(req:Request, res: Response) {
+        const params = await this.checkParameters(req, ['deleted'])
+
+        const result = await this.app.storeService.getFileTypes(params.deleted)
+        if (result) {
+            return this.successResponse(res, { result: result })
         } else {
             return this.errorResponse(res, 'No data yet')
         }

@@ -10,8 +10,8 @@ export interface IUser {
     email: string,
     phone: string,
     mobile: string,
-    userLogin: string,
-    userPassword: string,
+    login: string,
+    password: string,
     salt?: string|undefined,
     token?: string|undefined,
     tokenExpare?: number|undefined,
@@ -55,24 +55,24 @@ export class UserModel extends AbstractModel {
                 field: 'user_name',
                 allowNull: false,
             },
-            userLogin: {
+            login: {
                 type: DataTypes.STRING(50),
-                field: 'user_login',
+                field: 'login',
                 allowNull: true,
             },
-            userPassword: {
+            password: {
                 type: DataTypes.STRING(512),
-                field: 'user_password',
+                field: 'password',
                 allowNull: true,
             },
             token: {
                 type: DataTypes.STRING(512),
-                field: 'user_token',
+                field: 'token',
                 allowNull: true,
             },
             salt: {
                 type: DataTypes.BIGINT,
-                field: 'user_salt',
+                field: 'salt',
                 defaultValue: 0,
             },
             tokenExpare: {
@@ -117,21 +117,15 @@ export class UserModel extends AbstractModel {
                 allowNull: false,
             },
         }, {tableName: 'users', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
+        this.model.belongsTo(this.app.departmentModel.model)
     }
 
 
     ///======================================================== getters =========================
-    /**
-     * {id:0, uName: '', uLogin:'', uPassword: '', uToken:'', tokenExpare: 0, active:1, permitionId:0, departId: 1}
-     * permitionId:0 - только просмотр; 1: Просмотр + редактирование настроек
-     * Список владельцев МАС-адресов
-     * @param {*} active
-     */
-    public async getUsers(deleteIt = [0], ):Promise<IUser[]|undefined> {
+    public async getUsersAttr(deleteIt = [0], ) {
         try {
-            const result: IUser[] = []
-            const rows =  await this.model.findAll({
-                attributes: ['id', 'departmentId','storePointId','userName', 'userLogin', 'userPassword', 'permitionGroupSet', 'email', 'phone','mobile', 'deletedAt', 'updatedAt', 'createdAt'],
+            return await this.model.findAll({
+                include: [this.app.departmentModel.model],
                 where: {
                     deletedAt: {[DataTypes.Op.eq]: deleteIt }
                 },
@@ -139,24 +133,7 @@ export class UserModel extends AbstractModel {
                     ['id', 'ASC']
                 ]
             })
-            for (const r of rows) {
-                result.push( {
-                    id: r.id,
-                    departmentId: r.departmentId,
-                    storePointIdId: r.storePointId,
-                    userName: r.userName,
-                    userLogin: r.userLogin,
-                    userPassword: r.userPassword,
-                    permitionGroupSet: r.permitionId,
-                    email: r.email,
-                    phone: r.phone,
-                    mobile: r.mobile,
-                    deletedAt: r.deletedAt,
-                    updatedAt: r.updatedAt,
-                    createdAt: r.createdAt,
-                })
-            }
-            return result
+            
         } catch (err) {
             console.error(`ERROR_USER_SERVICE: ${err.message}`)
             return undefined
@@ -179,10 +156,10 @@ export class UserModel extends AbstractModel {
                 if (foundItem) {
                     foundItem.id = params.id
                     foundItem.uName = params.userName
-                    foundItem.uLogin = params.userLogin
+                    foundItem.uLogin = params.login
                     foundItem.departId = params.departmentId
-                    if (params.userPassword && params.userLogin) {
-                        foundItem.uPassword = this.hashGenerator(params.userPassword, params.userLogin)
+                    if (params.password && params.login) {
+                        foundItem.uPassword = this.hashGenerator(params.password, params.login)
                     }
                     foundItem.email = params.email,
                     foundItem.permitionId = params.permitionGroupSet
@@ -198,8 +175,8 @@ export class UserModel extends AbstractModel {
                 result = await this.model.create({
                     id: params.id,
                     uName: params.userName,
-                    uLogin: params.userLogin,
-                    uPassword: this.hashGenerator(params.userPassword, params.userLogin),
+                    uLogin: params.login,
+                    uPassword: this.hashGenerator(params.password, params.login),
                     email: params.email,
                     // uToken = params.uToken,
                     // uSalt = params.uSalt,

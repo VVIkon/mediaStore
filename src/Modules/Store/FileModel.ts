@@ -43,7 +43,7 @@ export class FileModel extends AbstractModel{
                 field: 'file_ext',
                 allowNull: false,
             },
-            fileTypeId:{
+            refFileTypeId:{
                 type: DataTypes.INTEGER(),
                 field: 'file_type_id',
                 allowNull: false,
@@ -86,23 +86,22 @@ export class FileModel extends AbstractModel{
                 allowNull: false,
             },
         }, {tableName: 'files', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
-
-        this.model.hasMany(this.model, { foreignKey: 'parentId' })
-        this.model.hasMany(this.app.crossStoreSelectorModel.model, { foreignKey: 'fileId' })
+        this.model.belongsTo(this.app.refFileTypeModel.model)
     }
 
 /** ---------------------------------GET/SET--------------------------------------- */
 
-    // public async getFile(id: number): Promise<IFile>{
-    //     return this.Model.findAll({
-    //         where: {
-    //             id: {[DataTypes.Op.eq]: id},
-    //         },
-    //         order: [
-    //             ['id', 'ASC']
-    //         ]
-    //     })
-    // }
+    public async getFileAttr(id: number): Promise<IFile>{
+        return this.model.findOne({
+            include: [this.app.refFileTypeModel.model],
+            where: {
+                id: {[DataTypes.Op.eq]: id}
+            },
+            order: [
+                ['id', 'ASC']
+            ]
+        })
+    }
     // public async saveStorePointItem(params: IFile): Promise<IFile> {
     //     let result = null
     //     if (params.id) {
@@ -113,13 +112,13 @@ export class FileModel extends AbstractModel{
     //                 result = await foundStorePoint.save()
     //             }
     //         } catch (err) {
-    //             console.log('Ошибка: ' + err, params.toString())
+    //             console.log('Mistake: ' + err, params.toString())
     //         }
     //     } else {
     //         try {
     //             result = await this.Model.create({ params})
     //         } catch (err) {
-    //             console.log('Ошибка: ' + err, params.toString())
+    //             console.log('Mistake: ' + err, params.toString())
     //         }
     //     }
     //     return result.dataValues

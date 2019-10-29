@@ -1,5 +1,5 @@
 import { Application } from '../../Application'
-import DataTypes from 'sequelize'
+import DataTypes, {Model} from 'sequelize'
 
 export abstract class AbstractModel {
     public model: any
@@ -10,21 +10,23 @@ export abstract class AbstractModel {
         return await this.model.findOne({
             where: {
                 Id: {[DataTypes.Op.eq]: id},
-                deleted: {[DataTypes.Op.in]: deleted }
+                deletedAt: {[DataTypes.Op.in]: deleted }
             },
             order: [
                 ['id', 'ASC']
             ]
         })
     }
-    public async getAll (deleted: number[]=[0]): Promise<any[]> {
+    public async getAll (deleted: number[]=[0], recLimit: number = 100, recOffSet: number = 0): Promise<any[]> {
         return await this.model.findAll({
             where: {
-                deleted: {[DataTypes.Op.in]: deleted }
+                deletedAt: {[DataTypes.Op.in]: deleted }
             },
-            order: [
-                ['id', 'ASC']
-            ]
+            order: [ 
+                ['id', 'ASC'] 
+            ],
+            limit: recLimit,
+            offset: recOffSet
         })
     }
     public async saveItem(params: any): Promise<any> {
@@ -37,13 +39,13 @@ export abstract class AbstractModel {
                     result = await items.save()
                 }
             } catch (err) {
-                console.log('Ошибка: ' + err, params.toString())
+                console.log('Mistake: ' + err, params.toString())
             }
         } else {
             try {
                 result = await this.model.create({ params})
             } catch (err) {
-                console.log('Ошибка: ' + err, params.toString())
+                console.log('Mistake: ' + err, params.toString())
             }
         }
         return result.dataValues
@@ -58,7 +60,7 @@ export abstract class AbstractModel {
                     await item.save()
                 }
             } catch (err) {
-                console.log(`Ошибка:  ${err}  id = ${id}`, )
+                console.log(`Mistake:  ${err}  id = ${id}`, )
             }
         }
     }

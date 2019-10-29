@@ -4,7 +4,6 @@ import { AbstractModel } from '../../Base/Services/AbstractModel'
 
 export interface IDepart {
     id: number,
-    storePointId: number,
     nameDepartment: string,
     deletedAt: number,
     updatedAt?: number,
@@ -25,7 +24,7 @@ export class DepartmentModel extends AbstractModel {
             },
             nameDepartment: {
                 type: DataTypes.STRING(255),
-                field: 'store_point_set',
+                field: 'name_department',
                 allowNull: false,
             },
             deletedAt: {
@@ -46,8 +45,5 @@ export class DepartmentModel extends AbstractModel {
             },
 
         }, {tableName: 'departments', createdAt: 'created_at', updatedAt: 'updated_at',  timestamps: true,})
-
-        this.model.hasMany(this.app.storePointsModel.model, { foreignKey: 'departmentId' })
-        this.model.hasMany(this.app.userModel.model, { foreignKey: 'departmentId' })
     }
 }
