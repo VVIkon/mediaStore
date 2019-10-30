@@ -9,7 +9,9 @@ export class Router {
     }
 
     protected routes(http: Express, app: Application) {
-        app.http.get('/', (req, res) => {res.send('Media Store check: Ok') })
+        app.http.get('/', (req, res) => {
+            res.send(fs.readFileSync('front/dist/index.html').toString())
+        })
 
         http.post('/api/store-point', (req, res) => app.storeController.getStorePoint(req, res))
         http.post('/api/store-point-files', (req, res) => app.storeController.getStorePointFiles(req, res))

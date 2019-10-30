@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs'
 import Express from 'express'
 import Multiparty from 'connect-multiparty'
 import { DbService } from './Base/Services/DbService'
@@ -87,9 +88,20 @@ export class Application {
         this.http.use(Express.json())
         this.http.use(Express.urlencoded({ extended: true }))
         this.http.use(Multiparty())
+        
+        // this.http.use(async (req, res, next) => {
+        //     if (req.url.indexOf('/api/') === -1) {
+        //         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate')
+        //         res.header('Expires', '-1')
+        //         res.header('Pragma', 'no-cache')
+        //         res.send(fs.readFileSync('front/dist/index.html').toString())
+        //     } else {
+        //         next()
+        //     }
+        // })
+        
         this.initializeControllers()
         this.router = new Router(this)
-
         this.http.listen(this.config.port, () => {
             console.log(`Web server started at port ${this.config.port}`)
         })
