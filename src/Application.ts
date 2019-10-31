@@ -25,7 +25,7 @@ import { RefPermissionModel} from './Modules/User/RefPermissionModel'
 export class Application {
     public mode!: string
     public http!: Express.Express
-    public rootDir: string = path.dirname(__dirname)
+    // public rootDir: string = path.dirname(__dirname)
 
     /* Commands */
     // public testCommand!: TestCommand
@@ -89,16 +89,16 @@ export class Application {
         this.http.use(Express.urlencoded({ extended: true }))
         this.http.use(Multiparty())
         
-        // this.http.use(async (req, res, next) => {
-        //     if (req.url.indexOf('/api/') === -1) {
-        //         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate')
-        //         res.header('Expires', '-1')
-        //         res.header('Pragma', 'no-cache')
-        //         res.send(fs.readFileSync('front/dist/index.html').toString())
-        //     } else {
-        //         next()
-        //     }
-        // })
+        this.http.use(async (req, res, next) => {
+            if (req.url.indexOf('/api/') === -1) {
+                res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate')
+                res.header('Expires', '-1')
+                res.header('Pragma', 'no-cache')
+                res.send(fs.readFileSync('front/dist/index.html').toString())
+            } else {
+                next()
+            }
+        })
         
         this.initializeControllers()
         this.router = new Router(this)

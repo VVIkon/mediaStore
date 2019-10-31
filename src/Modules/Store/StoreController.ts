@@ -2,11 +2,13 @@ import { Application } from '../../Application'
 import { AbstractController } from '../../Base/Controllers/AbstractController'
 import { Request, Response } from 'express'
 import { IStorePoints } from './StorePointsModel'
+import fs from 'fs'
 
 export class StoreController extends AbstractController {
 
     constructor(app: Application) {
         super(app)
+        // app.http.get('/', (req, res) => { res.send(fs.readFileSync('dist/index.html').toString()) })
     }
 
     public async getStorePoint(req:Request, res: Response) {

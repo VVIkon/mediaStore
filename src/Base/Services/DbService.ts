@@ -10,7 +10,8 @@ export class DbService {
         this.sequelize = new Sequelize({
             host: 'localhost',
             dialect: 'sqlite',
-            storage:  this.app.rootDir + this.app.config.db.path,
+            storage:  '/home/vvikon/Projects/mediaStore' + this.app.config.db.path,
+            // storage:  this.app.rootDir + this.app.config.db.path,
             logging: false 
           })
           
